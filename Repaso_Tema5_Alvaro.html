@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Repaso Tema 5 — Álvaro</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #3B82F6;
+    --blue-light: #EFF6FF;
+    --blue-dark: #1D4ED8;
+    --green: #22C55E;
+    --green-light: #F0FDF4;
+    --orange: #F97316;
+    --orange-light: #FFF7ED;
+    --purple: #A855F7;
+    --purple-light: #FAF5FF;
+    --red: #EF4444;
+    --red-light: #FEF2F2;
+    --yellow: #EAB308;
+    --yellow-light: #FEFCE8;
+    --gray: #6B7280;
+    --bg: #F8FAFF;
+    --white: #FFFFFF;
+    --text: #1E293B;
+    --text-soft: #64748B;
+    --radius: 18px;
+    --radius-sm: 10px;
+    --shadow: 0 4px 20px rgba(59,130,246,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { min-height: 100vh; background: var(--bg); font-family: 'Nunito', sans-serif; color: var(--text); }
+
+  /* TOP NAV */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 2px solid #E2E8F0;
+    padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .topbar-title { font-family: 'Baloo 2', sans-serif; font-size: 20px; font-weight: 800; color: var(--blue-dark); }
+  .topbar-title span { color: var(--orange); }
+  .score-pill {
+    background: var(--blue); color: #fff;
+    border-radius: 50px; padding: 6px 16px;
+    font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .star-icon { font-size: 16px; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { padding: 10px 16px 0; }
+  .progress-bar-bg { height: 8px; background: #E2E8F0; border-radius: 8px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--purple)); border-radius: 8px; transition: width 0.5s ease; }
+  .progress-label { font-size: 12px; color: var(--text-soft); margin-top: 4px; text-align: right; }
+
+  /* BLOQUE TABS */
+  .tabs-scroll { display: flex; gap: 8px; padding: 14px 16px 6px; overflow-x: auto; scrollbar-width: none; }
+  .tabs-scroll::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 8px 16px; border-radius: 50px;
+    border: 2px solid #E2E8F0;
+    background: var(--white); color: var(--text-soft);
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tab-btn.active { border-color: var(--blue); background: var(--blue); color: #fff; }
+  .tab-btn .check { font-size: 13px; }
+
+  /* MAIN */
+  main { padding: 10px 14px 80px; max-width: 720px; margin: 0 auto; }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+
+  .section-header {
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-header .emoji { font-size: 32px; }
+  .section-header h2 { font-family: 'Baloo 2', sans-serif; font-size: 20px; font-weight: 800; }
+  .section-header p { font-size: 13px; margin-top: 2px; opacity: 0.75; }
+
+  /* CARDS */
+  .card {
+    background: var(--white); border-radius: var(--radius);
+    padding: 18px 16px; margin-bottom: 14px;
+    border: 2px solid #E8EFF8; box-shadow: var(--shadow);
+  }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .q-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--blue); color: #fff; font-size: 13px; font-weight: 800; flex-shrink: 0;
+  }
+  .enunciado { font-size: 14px; color: var(--text-soft); margin-bottom: 14px; line-height: 1.6; font-style: italic; }
+  .recuadro {
+    background: #F0F7FF; border-left: 4px solid var(--blue);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 12px 14px; margin-bottom: 14px;
+    font-size: 14px; line-height: 1.7;
+  }
+
+  /* OPCIONES MÚLTIPLE */
+  .opciones { display: flex; flex-direction: column; gap: 8px; }
+  .opcion-btn {
+    width: 100%; text-align: left; padding: 12px 16px;
+    border-radius: var(--radius-sm); border: 2px solid #E2E8F0;
+    background: var(--white); font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 600; color: var(--text);
+    cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 10px;
+  }
+  .opcion-btn:hover:not(:disabled) { border-color: var(--blue); background: var(--blue-light); }
+  .opcion-btn.correct { border-color: var(--green); background: var(--green-light); color: #15803D; }
+  .opcion-btn.wrong { border-color: var(--red); background: var(--red-light); color: #B91C1C; }
+  .opcion-btn:disabled { cursor: default; }
+  .opcion-ico { font-size: 16px; min-width: 20px; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 10px; padding: 10px 14px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 600; display: none; line-height: 1.5;
+  }
+  .feedback.show { display: block; animation: popIn 0.25s ease; }
+  .feedback.ok { background: var(--green-light); color: #15803D; border-left: 4px solid var(--green); }
+  .feedback.mal { background: var(--red-light); color: #B91C1C; border-left: 4px solid var(--red); }
+  @keyframes popIn { from { transform: scale(0.95); opacity:0; } to { transform:none; opacity:1; } }
+
+  /* COMPLETAR TEXTO */
+  .texto-completar { font-size: 15px; line-height: 2.4; }
+  .blank {
+    display: inline-block; border: none; border-bottom: 2.5px solid var(--blue);
+    background: transparent; font-family: 'Nunito', sans-serif; font-size: 15px;
+    font-weight: 700; color: var(--blue-dark); text-align: center;
+    outline: none; padding: 0 4px; width: 120px; transition: border-color 0.2s;
+  }
+  .blank:focus { border-bottom-color: var(--purple); background: var(--purple-light); border-radius: 4px 4px 0 0; }
+  .blank.filled-ok { border-bottom-color: var(--green); color: #15803D; }
+  .blank.filled-err { border-bottom-color: var(--red); color: var(--red); }
+  .check-btn {
+    margin-top: 14px; padding: 10px 22px;
+    background: var(--blue); color: #fff; border: none;
+    border-radius: 50px; font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .check-btn:hover { background: var(--blue-dark); transform: scale(1.03); }
+  .check-btn:active { transform: scale(0.97); }
+
+  /* TABLAS CLASIFICAR */
+  .tabla-clasificar { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  .tabla-clasificar th {
+    padding: 10px; font-size: 13px; font-weight: 800; text-align: center;
+    border-radius: 8px 8px 0 0;
+  }
+  .col-sust th { background: var(--blue); color: #fff; }
+  .col-adj th { background: var(--orange); color: #fff; }
+  .col-verb th { background: var(--green); color: #fff; }
+  .tabla-clasificar td { padding: 8px 6px; vertical-align: top; border: 1px solid #E2E8F0; }
+  .chip-word {
+    display: inline-block; background: #F1F5F9; border: 2px solid #CBD5E1;
+    border-radius: 50px; padding: 4px 12px; margin: 4px;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.18s; user-select: none;
+  }
+  .chip-word:hover { border-color: var(--blue); background: var(--blue-light); }
+  .chip-word.placed-sust { background: var(--blue-light); border-color: var(--blue); color: var(--blue-dark); }
+  .chip-word.placed-adj { background: var(--orange-light); border-color: var(--orange); color: #C2410C; }
+  .chip-word.placed-verb { background: var(--green-light); border-color: var(--green); color: #15803D; }
+  .chip-word.placed-correct { opacity: 1; }
+  .chip-word.placed-wrong { text-decoration: line-through; opacity: 0.6; }
+  .drop-zone {
+    min-height: 60px; border: 2px dashed #CBD5E1; border-radius: var(--radius-sm);
+    padding: 6px; display: flex; flex-wrap: wrap; gap: 4px;
+    transition: border-color 0.2s;
+  }
+  .drop-zone.highlight { border-color: var(--blue); background: var(--blue-light); }
+  .palabras-banco { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+
+  /* CARTEL */
+  .cartel-box {
+    border: 3px dashed #CBD5E1; border-radius: var(--radius);
+    padding: 20px; background: #FFFBF0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .cartel-field label { font-size: 12px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
+  .cartel-field input, .cartel-field textarea {
+    width: 100%; border: 2px solid #E2E8F0; border-radius: var(--radius-sm);
+    padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 15px;
+    font-weight: 600; color: var(--text); background: var(--white); outline: none;
+    transition: border-color 0.2s; resize: none;
+  }
+  .cartel-field input:focus, .cartel-field textarea:focus { border-color: var(--blue); }
+  .cartel-field.titulo-field input { font-size: 18px; font-weight: 900; text-transform: uppercase; color: var(--blue-dark); text-align: center; letter-spacing: 1px; }
+
+  /* WRITE AREA */
+  .write-area {
+    width: 100%; min-height: 90px; border: 2px solid #E2E8F0; border-radius: var(--radius-sm);
+    padding: 12px 14px; font-family: 'Nunito', sans-serif; font-size: 15px;
+    color: var(--text); background: var(--white); outline: none;
+    transition: border-color 0.2s; resize: vertical; line-height: 1.8;
+  }
+  .write-area:focus { border-color: var(--blue); }
+
+  /* ORDENAR PARTES */
+  .draggable-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .drag-item {
+    background: var(--white); border: 2px solid #E2E8F0; border-radius: var(--radius-sm);
+    padding: 12px 14px; font-size: 14px; font-weight: 600; cursor: grab;
+    display: flex; align-items: center; gap: 10px; user-select: none;
+    transition: box-shadow 0.18s, border-color 0.18s;
+  }
+  .drag-item:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(59,130,246,0.15); }
+  .drag-item .drag-handle { color: #CBD5E1; font-size: 18px; }
+  .drag-item .num-badge { background: var(--blue); color: #fff; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+
+  /* CELEBRACIÓN */
+  .celebrate { display: none; text-align: center; padding: 30px 20px; }
+  .celebrate.show { display: block; animation: bounceIn 0.6s ease; }
+  .celebrate .emoji-big { font-size: 72px; display: block; margin-bottom: 12px; }
+  .celebrate h2 { font-family: 'Baloo 2', sans-serif; font-size: 26px; font-weight: 800; color: var(--blue-dark); }
+  .celebrate p { font-size: 16px; color: var(--text-soft); margin-top: 6px; }
+  @keyframes bounceIn { 0% { transform: scale(0.5); opacity:0; } 70% { transform: scale(1.1); } 100% { transform:none; opacity:1; } }
+
+  /* NAV BOTONES */
+  .nav-btns { display: flex; gap: 10px; margin-top: 16px; }
+  .nav-btn {
+    flex: 1; padding: 14px; border-radius: var(--radius-sm);
+    border: 2px solid #E2E8F0; background: var(--white);
+    font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.18s; text-align: center;
+  }
+  .nav-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .nav-btn:hover { transform: scale(1.02); }
+  .nav-btn:active { transform: scale(0.98); }
+
+  /* COLORS PER SECTION */
+  .hdr-ortografia { background: #EFF6FF; }
+  .hdr-ortografia h2 { color: var(--blue-dark); }
+  .hdr-gramatica { background: #F0FDF4; }
+  .hdr-gramatica h2 { color: #15803D; }
+  .hdr-vocabulario { background: #FAF5FF; }
+  .hdr-vocabulario h2 { color: #7E22CE; }
+  .hdr-noticia { background: #FFF7ED; }
+  .hdr-noticia h2 { color: #C2410C; }
+  .hdr-lectura { background: #FEFCE8; }
+  .hdr-lectura h2 { color: #A16207; }
+
+  .q-num.verde { background: var(--green); }
+  .q-num.naranja { background: var(--orange); }
+  .q-num.morado { background: var(--purple); }
+  .q-num.rojo { background: var(--red); }
+  .q-num.amarillo { background: var(--yellow); color: #1E293B; }
+
+  .hint { font-size: 12px; color: var(--text-soft); margin-top: 6px; font-style: italic; }
+  .sep { height: 1px; background: #E8EFF8; margin: 14px 0; }
+
+  /* UNIR CON FLECHAS — simplified tap UI */
+  .match-container { display: flex; gap: 10px; align-items: flex-start; }
+  .match-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .match-item {
+    padding: 10px 14px; border-radius: var(--radius-sm); border: 2px solid #E2E8F0;
+    background: var(--white); font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.18s; text-align: center;
+  }
+  .match-item:hover { border-color: var(--blue); background: var(--blue-light); }
+  .match-item.selected { border-color: var(--purple); background: var(--purple-light); color: #7E22CE; }
+  .match-item.matched-ok { border-color: var(--green); background: var(--green-light); color: #15803D; pointer-events: none; }
+  .match-item.matched-err { border-color: var(--red); background: var(--red-light); pointer-events: none; animation: shake 0.3s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .match-arrow { display: flex; align-items: center; justify-content: center; padding-top: 10px; color: #CBD5E1; font-size: 20px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .section-header h2 { font-size: 17px; }
+    .texto-completar { font-size: 14px; }
+    .blank { width: 90px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">⭐ Repaso Tema 5 · <span>Álvaro</span></div>
+  <div class="score-pill"><span class="star-icon">⭐</span><span id="score-val">0</span> pts</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="prog-label">0 de 22 ejercicios completados</div>
+</div>
+
+<div class="tabs-scroll">
+  <button class="tab-btn active" onclick="showSection('ortografia',this)"><span>✏️</span> Ortografía</button>
+  <button class="tab-btn" onclick="showSection('gramatica',this)"><span>📚</span> Gramática</button>
+  <button class="tab-btn" onclick="showSection('vocabulario',this)"><span>💬</span> Vocabulario</button>
+  <button class="tab-btn" onclick="showSection('noticia',this)"><span>📰</span> Noticia</button>
+  <button class="tab-btn" onclick="showSection('lectura',this)"><span>📖</span> Lectura</button>
+</div>
+
+<main>
+
+<!-- ===================== ORTOGRAFÍA ===================== -->
+<div class="section active" id="ortografia">
+  <div class="section-header hdr-ortografia">
+    <div class="emoji">✏️</div>
+    <div><h2>Ortografía</h2><p>MP y MB · Palabras con LL · Punto y mayúscula</p></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="card">
+    <h3><span class="q-num">1</span> Elige la palabra correcta</h3>
+    <p class="enunciado">Recuerda: delante de P y B siempre se escribe M.</p>
+    <div id="grupo-mp" style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:8px;">¿Cómo se escribe?</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q1','¡Casi! Recuerda: antes de P va M → ca<strong>m</strong>po.')"><span class="opcion-ico"></span>canpo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-q1','¡Correcto! Ca<strong>m</strong>po → la M va antes de la P.')"><span class="opcion-ico"></span>campo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q1','No. La M va antes de P o B. Es ca<strong>m</strong>po.')"><span class="opcion-ico"></span>canbo</button>
+        </div>
+        <div class="feedback" id="fb-q1"></div>
+      </div>
+      <div class="sep"></div>
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:8px;">¿Cuál lleva MB?</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q2','No. Trampa lleva MP: tra<strong>mp</strong>a.')"><span class="opcion-ico"></span>trampa</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-q2','¡Muy bien! Bom<strong>b</strong>a lleva MB: antes de B va M.')"><span class="opcion-ico"></span>bomba</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q2','No. Campo lleva MP: ca<strong>mp</strong>o.')"><span class="opcion-ico"></span>campo</button>
+        </div>
+        <div class="feedback" id="fb-q2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="card">
+    <h3><span class="q-num">2</span> Completa con MP o MB</h3>
+    <p class="enunciado">Escribe MP o MB en cada hueco.</p>
+    <div class="texto-completar">
+      tro<input class="blank" id="b1" maxlength="2" placeholder="??" oninput="this.value=this.value.toUpperCase()">a &nbsp;&nbsp;
+      bo<input class="blank" id="b2" maxlength="2" placeholder="??" oninput="this.value=this.value.toUpperCase()">a &nbsp;&nbsp;
+      ca<input class="blank" id="b3" maxlength="2" placeholder="??" oninput="this.value=this.value.toUpperCase()">o
+    </div>
+    <div class="texto-completar" style="margin-top:12px;">
+      ru<input class="blank" id="b4" maxlength="2" placeholder="??" oninput="this.value=this.value.toUpperCase()">a &nbsp;&nbsp;
+      la<input class="blank" id="b5" maxlength="2" placeholder="??" oninput="this.value=this.value.toUpperCase()">a
+    </div>
+    <button class="check-btn" onclick="checkBlanks(['b1','b2','b3','b4','b5'],['MB','MB','MP','MB','MP'],'fb-q3')">✔ Comprobar</button>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <!-- Q3 — LL -->
+  <div class="card">
+    <h3><span class="q-num">3</span> Palabras con LL — Elige la correcta</h3>
+    <p class="enunciado">Las palabras que terminan en -illo o -illa se escriben con LL.</p>
+    <div>
+      <p style="font-size:14px;font-weight:700;margin-bottom:8px;">La silla de color _____ tenía un tornillo suelto.</p>
+      <div class="opciones">
+        <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q4','Incorrecto. Amarilla lleva LL: amari<strong>ll</strong>a.')"><span class="opcion-ico"></span>amariya</button>
+        <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-q4','¡Perfecto! Amari<strong>lla</strong> → termina en -illa, con LL.')"><span class="opcion-ico"></span>amarilla</button>
+        <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q4','No. Amarilla lleva LL: amari<strong>ll</strong>a.')"><span class="opcion-ico"></span>amarila</button>
+      </div>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+  </div>
+
+  <!-- Q4 — Completar texto illo/illa -->
+  <div class="card">
+    <h3><span class="q-num">4</span> Completa el texto</h3>
+    <p class="enunciado">Usa las palabras del recuadro.</p>
+    <div class="recuadro">📦 <strong>silla · amarilla · tornillo · martillo</strong></div>
+    <div class="texto-completar">
+      La <input class="blank" id="c1" maxlength="12" placeholder="________"> de color <input class="blank" id="c2" maxlength="12" placeholder="________"> tenía un <input class="blank" id="c3" maxlength="12" placeholder="________"> flojo. Cogí el <input class="blank" id="c4" maxlength="12" placeholder="________"> y lo arreglé. ¡Quedó perfecta!
+    </div>
+    <button class="check-btn" onclick="checkBlanksText(['c1','c2','c3','c4'],['silla','amarilla','tornillo','martillo'],'fb-q5')">✔ Comprobar</button>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+
+  <!-- Q5 — Mayúsculas -->
+  <div class="card">
+    <h3><span class="q-num">5</span> El punto y la mayúscula</h3>
+    <p class="enunciado">¿Cuándo se escribe con mayúscula?</p>
+    <div class="opciones">
+      <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q6','No del todo. La mayúscula va al principio Y después de punto.')"><span class="opcion-ico"></span>Solo al principio del texto</button>
+      <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-q6','¡Exacto! Mayúscula al <strong>principio</strong> del texto y <strong>después de un punto</strong>.')"><span class="opcion-ico"></span>Al principio del texto y después de un punto</button>
+      <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-q6','No. La mayúscula va al principio y después del punto, no al final.')"><span class="opcion-ico"></span>Al final de cada oración</button>
+    </div>
+    <div class="feedback" id="fb-q6"></div>
+  </div>
+
+  <!-- Q6 — Corregir mayúsculas -->
+  <div class="card">
+    <h3><span class="q-num">6</span> Corrige el texto</h3>
+    <p class="enunciado">Reescribe el texto con las mayúsculas y puntos que faltan.</p>
+    <div class="recuadro">comer bien es muy importante para estar sanos por eso comemos frutas y verduras todos los días nunca nos olvidamos de beber agua</div>
+    <textarea class="write-area" placeholder="Escribe aquí el texto corregido..." rows="5"></textarea>
+    <p class="hint">💡 Pista: hay 3 oraciones. Cada una empieza con mayúscula.</p>
+    <button class="check-btn" onclick="markWritten(this,'fb-q7')">✔ He terminado</button>
+    <div class="feedback" id="fb-q7"></div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="nav-btn primary" onclick="showSection('gramatica',document.querySelectorAll('.tab-btn')[1])">Siguiente: Gramática →</button>
+  </div>
+</div>
+
+<!-- ===================== GRAMÁTICA ===================== -->
+<div class="section" id="gramatica">
+  <div class="section-header hdr-gramatica">
+    <div class="emoji">📚</div>
+    <div><h2>Gramática</h2><p>Sustantivo · Adjetivo · Verbo · Oraciones</p></div>
+  </div>
+
+  <!-- Q7 — Clasificar -->
+  <div class="card">
+    <h3><span class="q-num verde">7</span> Clasifica las palabras</h3>
+    <p class="enunciado">Toca una palabra y luego toca la columna donde va.</p>
+    <div class="palabras-banco" id="banco">
+      <span class="chip-word" onclick="selectChip(this)">gato</span>
+      <span class="chip-word" onclick="selectChip(this)">corre</span>
+      <span class="chip-word" onclick="selectChip(this)">pequeño</span>
+      <span class="chip-word" onclick="selectChip(this)">parque</span>
+      <span class="chip-word" onclick="selectChip(this)">vuela</span>
+      <span class="chip-word" onclick="selectChip(this)">bonito</span>
+      <span class="chip-word" onclick="selectChip(this)">libro</span>
+      <span class="chip-word" onclick="selectChip(this)">salta</span>
+      <span class="chip-word" onclick="selectChip(this)">grande</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <div>
+        <div style="background:var(--blue);color:#fff;text-align:center;padding:8px;border-radius:8px 8px 0 0;font-weight:800;font-size:13px;">SUSTANTIVO</div>
+        <div class="drop-zone" id="zone-sust" onclick="dropChip(this,'sust')"></div>
+      </div>
+      <div>
+        <div style="background:var(--orange);color:#fff;text-align:center;padding:8px;border-radius:8px 8px 0 0;font-weight:800;font-size:13px;">ADJETIVO</div>
+        <div class="drop-zone" id="zone-adj" onclick="dropChip(this,'adj')"></div>
+      </div>
+      <div>
+        <div style="background:var(--green);color:#fff;text-align:center;padding:8px;border-radius:8px 8px 0 0;font-weight:800;font-size:13px;">VERBO</div>
+        <div class="drop-zone" id="zone-verb" onclick="dropChip(this,'verb')"></div>
+      </div>
+    </div>
+    <button class="check-btn" style="margin-top:12px;" onclick="checkClasificar('fb-q8')">✔ Comprobar</button>
+    <div class="feedback" id="fb-q8"></div>
+  </div>
+
+  <!-- Q8 — Identificar en oración -->
+  <div class="card">
+    <h3><span class="q-num verde">8</span> ¿Qué tipo de palabra es?</h3>
+    <p class="enunciado">Toca la respuesta correcta para cada palabra en negrita.</p>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">El pájaro <strong>pequeño</strong> vuela.</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g1','No. Pequeño describe al pájaro → es un adjetivo.')"><span class="opcion-ico"></span>Sustantivo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-g1','¡Sí! <strong>Pequeño</strong> describe cómo es el pájaro → adjetivo.')"><span class="opcion-ico"></span>Adjetivo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g1','No. Pequeño no es una acción → es un adjetivo.')"><span class="opcion-ico"></span>Verbo</button>
+        </div>
+        <div class="feedback" id="fb-g1"></div>
+      </div>
+      <div class="sep"></div>
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">El <strong>sol</strong> brilla en el cielo.</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-g2','¡Perfecto! <strong>Sol</strong> es un nombre → sustantivo.')"><span class="opcion-ico"></span>Sustantivo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g2','No. Sol no describe, nombra una cosa → es un sustantivo.')"><span class="opcion-ico"></span>Adjetivo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g2','No. Sol no es una acción → es un sustantivo.')"><span class="opcion-ico"></span>Verbo</button>
+        </div>
+        <div class="feedback" id="fb-g2"></div>
+      </div>
+      <div class="sep"></div>
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">La flor roja <strong>huele</strong> muy bien.</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g3','No. Huele no nombra, dice lo que hace la flor → es un verbo.')"><span class="opcion-ico"></span>Sustantivo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g3','No. Huele no describe, es una acción → es un verbo.')"><span class="opcion-ico"></span>Adjetivo</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-g3','¡Bravo! <strong>Huele</strong> dice lo que hace la flor → verbo.')"><span class="opcion-ico"></span>Verbo</button>
+        </div>
+        <div class="feedback" id="fb-g3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q9 — Afirmativa / Negativa -->
+  <div class="card">
+    <h3><span class="q-num verde">9</span> ¿Afirmativa o negativa?</h3>
+    <p class="enunciado">La oración negativa lleva la palabra NO delante del verbo.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">"El gato <strong>no</strong> duerme en el sofá."</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g4','No. Lleva la palabra NO → es negativa.')"><span class="opcion-ico"></span>Afirmativa</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-g4','¡Correcto! Tiene la palabra <strong>no</strong> → negativa.')"><span class="opcion-ico"></span>Negativa</button>
+        </div>
+        <div class="feedback" id="fb-g4"></div>
+      </div>
+      <div class="sep"></div>
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">"El sol brilla en el cielo."</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-g5','¡Muy bien! No tiene NO → es afirmativa.')"><span class="opcion-ico"></span>Afirmativa</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-g5','No. No tiene la palabra NO → es afirmativa.')"><span class="opcion-ico"></span>Negativa</button>
+        </div>
+        <div class="feedback" id="fb-g5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q10 — Convertir en negativa -->
+  <div class="card">
+    <h3><span class="q-num verde">10</span> Convierte en negativa</h3>
+    <p class="enunciado">Escribe la oración con NO para que sea negativa.</p>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:6px;">La noria gira rápido.</p>
+        <textarea class="write-area" rows="2" placeholder="La noria..."></textarea>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:6px;">El pez nada en el lago.</p>
+        <textarea class="write-area" rows="2" placeholder="El pez..."></textarea>
+      </div>
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:6px;">Mi amigo tiene una bicicleta.</p>
+        <textarea class="write-area" rows="2" placeholder="Mi amigo..."></textarea>
+      </div>
+    </div>
+    <button class="check-btn" onclick="markWritten(this,'fb-g6')">✔ He terminado</button>
+    <div class="feedback" id="fb-g6"></div>
+    <p class="hint">💡 Pista: añade NO delante del verbo.</p>
+  </div>
+
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="showSection('ortografia',document.querySelectorAll('.tab-btn')[0])">← Ortografía</button>
+    <button class="nav-btn primary" onclick="showSection('vocabulario',document.querySelectorAll('.tab-btn')[2])">Vocabulario →</button>
+  </div>
+</div>
+
+<!-- ===================== VOCABULARIO ===================== -->
+<div class="section" id="vocabulario">
+  <div class="section-header hdr-vocabulario">
+    <div class="emoji">💬</div>
+    <div><h2>Vocabulario</h2><p>Sinónimos · Conceptos espaciales y temporales</p></div>
+  </div>
+
+  <!-- Q11 — Sinónimos matching -->
+  <div class="card">
+    <h3><span class="q-num morado">11</span> Une los sinónimos</h3>
+    <p class="enunciado">Toca una palabra de la izquierda y luego su sinónimo de la derecha.</p>
+    <div class="match-container">
+      <div class="match-col" id="left-col">
+        <div class="match-item" data-word="rápido" onclick="selectLeft(this)">rápido</div>
+        <div class="match-item" data-word="glotón" onclick="selectLeft(this)">glotón</div>
+        <div class="match-item" data-word="fantástico" onclick="selectLeft(this)">fantástico</div>
+        <div class="match-item" data-word="hablador" onclick="selectLeft(this)">hablador</div>
+      </div>
+      <div class="match-arrow">⟷</div>
+      <div class="match-col" id="right-col">
+        <div class="match-item" data-pair="fantástico" onclick="selectRight(this)">maravilloso</div>
+        <div class="match-item" data-pair="glotón" onclick="selectRight(this)">comilón</div>
+        <div class="match-item" data-pair="rápido" onclick="selectRight(this)">veloz</div>
+        <div class="match-item" data-pair="hablador" onclick="selectRight(this)">parlanchín</div>
+      </div>
+    </div>
+    <div class="feedback" id="fb-q11"></div>
+  </div>
+
+  <!-- Q12 — Sinónimo elegir -->
+  <div class="card">
+    <h3><span class="q-num morado">12</span> ¿Cuál es el sinónimo?</h3>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">Sinónimo de <strong>risotadas</strong>:</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-v1','No. Lloros no es sinónimo de risotadas.')"><span class="opcion-ico"></span>lloros</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-v1','¡Correcto! Carcajadas y risotadas significan lo mismo.')"><span class="opcion-ico"></span>carcajadas</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-v1','No. Susurros no es sinónimo de risotadas.')"><span class="opcion-ico"></span>susurros</button>
+        </div>
+        <div class="feedback" id="fb-v1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q13 — Espaciales -->
+  <div class="card">
+    <h3><span class="q-num morado">13</span> Conceptos espaciales</h3>
+    <p class="enunciado">Elige la palabra de lugar correcta.</p>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">Los globos flotan _______ de la taquilla.</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-v2','No. Delante es horizontal, pero los globos están más arriba.')"><span class="opcion-ico"></span>delante</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-v2','¡Sí! <strong>Por encima</strong> → los globos están más altos que la taquilla.')"><span class="opcion-ico"></span>por encima</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-v2','No. Detrás es horizontal, los globos están flotando más arriba.')"><span class="opcion-ico"></span>detrás</button>
+        </div>
+        <div class="feedback" id="fb-v2"></div>
+      </div>
+      <div class="sep"></div>
+      <div>
+        <p style="font-size:14px;margin-bottom:8px;">El vagón rojo está _______, el azul está _______.</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-v3','¡Perfecto! El rojo está <strong>delante</strong> y el azul <strong>detrás</strong>.')"><span class="opcion-ico"></span>delante / detrás</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-v3','Al revés. El rojo es el primero → está delante.')"><span class="opcion-ico"></span>detrás / delante</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-v3','No. Encima/debajo son palabras de altura, no de orden.')"><span class="opcion-ico"></span>encima / debajo</button>
+        </div>
+        <div class="feedback" id="fb-v3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q14 — Temporales -->
+  <div class="card">
+    <h3><span class="q-num morado">14</span> Conceptos temporales</h3>
+    <p class="enunciado">Ordena el día del parque usando palabras de tiempo.</p>
+    <div class="recuadro">🎭 Teatro de títeres: 10:30 · 🎬 Cine: 17:00 · 🎆 Fuegos artificiales: 23:00</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-weight:700;font-size:14px;min-width:130px;">Por la mañana:</span>
+        <select style="flex:1;padding:10px;border-radius:var(--radius-sm);border:2px solid #E2E8F0;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;" id="sel-m" onchange="checkTemporales()">
+          <option value="">— elige —</option>
+          <option value="teatro">Teatro de títeres</option>
+          <option value="cine">Cine</option>
+          <option value="fuegos">Fuegos artificiales</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-weight:700;font-size:14px;min-width:130px;">Por la tarde:</span>
+        <select style="flex:1;padding:10px;border-radius:var(--radius-sm);border:2px solid #E2E8F0;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;" id="sel-t" onchange="checkTemporales()">
+          <option value="">— elige —</option>
+          <option value="teatro">Teatro de títeres</option>
+          <option value="cine">Cine</option>
+          <option value="fuegos">Fuegos artificiales</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-weight:700;font-size:14px;min-width:130px;">Por la noche:</span>
+        <select style="flex:1;padding:10px;border-radius:var(--radius-sm);border:2px solid #E2E8F0;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;" id="sel-n" onchange="checkTemporales()">
+          <option value="">— elige —</option>
+          <option value="teatro">Teatro de títeres</option>
+          <option value="cine">Cine</option>
+          <option value="fuegos">Fuegos artificiales</option>
+        </select>
+      </div>
+    </div>
+    <div class="feedback" id="fb-v4"></div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="showSection('gramatica',document.querySelectorAll('.tab-btn')[1])">← Gramática</button>
+    <button class="nav-btn primary" onclick="showSection('noticia',document.querySelectorAll('.tab-btn')[3])">Noticia →</button>
+  </div>
+</div>
+
+<!-- ===================== NOTICIA ===================== -->
+<div class="section" id="noticia">
+  <div class="section-header hdr-noticia">
+    <div class="emoji">📰</div>
+    <div><h2>La Noticia y el Cartel</h2><p>Comprensión · Expresión escrita</p></div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="card">
+    <h3><span class="q-num rojo">15</span> ¿Qué es el titular?</h3>
+    <div class="opciones">
+      <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-n1','No. El titular no es la foto.')"><span class="opcion-ico"></span>La foto de la noticia</button>
+      <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-n1','¡Correcto! El <strong>titular</strong> es el título de la noticia: la frase principal.')"><span class="opcion-ico"></span>La frase principal que dice de qué trata la noticia</button>
+      <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-n1','No. La fecha es otro dato, no el titular.')"><span class="opcion-ico"></span>La fecha en que ocurrió</button>
+    </div>
+    <div class="feedback" id="fb-n1"></div>
+  </div>
+
+  <!-- Q16 — comprensión noticia -->
+  <div class="card">
+    <h3><span class="q-num rojo">16</span> Lee y responde</h3>
+    <div class="recuadro"><strong>UN DÍA CARGADO DE AMOR</strong><br><br>Durante el día de ayer, en Villarrosada, se realizaron diversas actividades para celebrar el Día Internacional de la Solidaridad. Por la mañana, el coro del colegio cantó en el asilo. Por la tarde, tuvo lugar una carrera solidaria en el parque. Por la noche, se organizó una cena benéfica.</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:10px;">
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:6px;">¿Dónde sucedió?</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-n2','No. Fíjate en el texto.')"><span class="opcion-ico"></span>En Madrid</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-n2','¡Bien! Sucedió en <strong>Villarrosada</strong>.')"><span class="opcion-ico"></span>En Villarrosada</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-n2','No. Lee de nuevo el texto.')"><span class="opcion-ico"></span>En el colegio</button>
+        </div>
+        <div class="feedback" id="fb-n2"></div>
+      </div>
+      <div class="sep"></div>
+      <div>
+        <p style="font-size:14px;font-weight:700;margin-bottom:6px;">¿Qué pasó por la mañana?</p>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-n3','No. La carrera fue por la tarde.')"><span class="opcion-ico"></span>Una carrera solidaria</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-n3','No. La cena fue por la noche.')"><span class="opcion-ico"></span>Una cena benéfica</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-n3','¡Perfecto! Por la mañana, <strong>el coro del colegio cantó en el asilo</strong>.')"><span class="opcion-ico"></span>El coro del colegio cantó en el asilo</button>
+        </div>
+        <div class="feedback" id="fb-n3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q17 — Crear cartel -->
+  <div class="card">
+    <h3><span class="q-num rojo">17</span> Crea tu cartel</h3>
+    <p class="enunciado">Anuncia un GRAN PASACALLES en el parque de tu barrio. Rellena el cartel.</p>
+    <div class="cartel-box">
+      <div class="cartel-field titulo-field">
+        <label>🎪 Nombre del espectáculo (en MAYÚSCULAS)</label>
+        <input type="text" placeholder="GRAN PASACALLES..." oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div class="cartel-field">
+        <label>📅 ¿Cuándo?</label>
+        <input type="text" placeholder="El sábado a las...">
+      </div>
+      <div class="cartel-field">
+        <label>📍 ¿Dónde?</label>
+        <input type="text" placeholder="En el parque de...">
+      </div>
+      <div class="cartel-field">
+        <label>📣 Frase para animar a la gente</label>
+        <input type="text" placeholder="¡No te lo pierdas!">
+      </div>
+    </div>
+    <button class="check-btn" style="margin-top:12px;" onclick="checkCartel('fb-n4')">✔ He terminado mi cartel</button>
+    <div class="feedback" id="fb-n4"></div>
+  </div>
+
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="showSection('vocabulario',document.querySelectorAll('.tab-btn')[2])">← Vocabulario</button>
+    <button class="nav-btn primary" onclick="showSection('lectura',document.querySelectorAll('.tab-btn')[4])">Lectura →</button>
+  </div>
+</div>
+
+<!-- ===================== LECTURA ===================== -->
+<div class="section" id="lectura">
+  <div class="section-header hdr-lectura">
+    <div class="emoji">📖</div>
+    <div><h2>Comprensión Lectora</h2><p>Lee con atención y contesta</p></div>
+  </div>
+
+  <div class="card">
+    <div class="recuadro"><strong>Una dieta saludable</strong><br><br>Comer bien es muy importante para estar sanos. Por eso, en casa, llevamos una dieta saludable. Comemos frutas y verduras todos los días. Varias veces a la semana, tomamos pescado, carne, huevos y legumbres. Y nunca nos olvidamos de beber seis vasos de agua al día, por lo menos.</div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;margin-top:14px;">
+      <!-- Q18 -->
+      <div>
+        <h3 style="font-size:14px;margin-bottom:8px;"><span class="q-num amarillo" style="width:22px;height:22px;font-size:12px;">18</span> ¿Cuál es la primera palabra del texto?</h3>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-l1','No. Fíjate en el principio del texto.')"><span class="opcion-ico"></span>Por</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-l1','¡Sí! <strong>Comer</strong> es la primera palabra. Empieza con C mayúscula porque es el inicio del texto.')"><span class="opcion-ico"></span>Comer</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-l1','No. Casa no es la primera palabra del texto.')"><span class="opcion-ico"></span>Casa</button>
+        </div>
+        <div class="feedback" id="fb-l1"></div>
+      </div>
+      <div class="sep"></div>
+
+      <!-- Q19 -->
+      <div>
+        <h3 style="font-size:14px;margin-bottom:8px;"><span class="q-num amarillo" style="width:22px;height:22px;font-size:12px;">19</span> ¿Cuántos vasos de agua hay que beber?</h3>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-l2','No. Lee bien el texto.')"><span class="opcion-ico"></span>Tres vasos</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-l2','¡Correcto! El texto dice "<strong>seis vasos</strong> de agua al día, por lo menos".')"><span class="opcion-ico"></span>Seis vasos</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-l2','No. Ese número no aparece en el texto.')"><span class="opcion-ico"></span>Ocho vasos</button>
+        </div>
+        <div class="feedback" id="fb-l2"></div>
+      </div>
+      <div class="sep"></div>
+
+      <!-- Q20 -->
+      <div>
+        <h3 style="font-size:14px;margin-bottom:8px;"><span class="q-num amarillo" style="width:22px;height:22px;font-size:12px;">20</span> ¿Qué comen varias veces a la semana?</h3>
+        <div class="opciones">
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-l3','No. Las frutas y verduras las comen todos los días.')"><span class="opcion-ico"></span>Solo frutas y verduras</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'correct','fb-l3','¡Muy bien! Varias veces a la semana toman <strong>pescado, carne, huevos y legumbres</strong>.')"><span class="opcion-ico"></span>Pescado, carne, huevos y legumbres</button>
+          <button class="opcion-btn" onclick="checkOpcion(this,'wrong','fb-l3','No. Solo agua no es suficiente.')"><span class="opcion-ico"></span>Solo agua</button>
+        </div>
+        <div class="feedback" id="fb-l3"></div>
+      </div>
+      <div class="sep"></div>
+
+      <!-- Q21 -->
+      <div>
+        <h3 style="font-size:14px;margin-bottom:8px;"><span class="q-num amarillo" style="width:22px;height:22px;font-size:12px;">21</span> ¿Por qué es importante comer bien?</h3>
+        <textarea class="write-area" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
+        <button class="check-btn" onclick="markWritten(this,'fb-l4')">✔ He terminado</button>
+        <div class="feedback" id="fb-l4"></div>
+        <p class="hint">💡 La respuesta está en la primera oración del texto.</p>
+      </div>
+      <div class="sep"></div>
+
+      <!-- Q22 -->
+      <div>
+        <h3 style="font-size:14px;margin-bottom:8px;"><span class="q-num amarillo" style="width:22px;height:22px;font-size:12px;">22</span> Escribe 3 alimentos que te gusten y di si son saludables o no.</h3>
+        <textarea class="write-area" rows="4" placeholder="1. ...\n2. ...\n3. ..."></textarea>
+        <button class="check-btn" onclick="markWritten(this,'fb-l5')">✔ He terminado</button>
+        <div class="feedback" id="fb-l5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CELEBRACIÓN FINAL -->
+  <div class="celebrate" id="celebrate">
+    <span class="emoji-big">🎉</span>
+    <h2>¡Fantástico, Álvaro!</h2>
+    <p>Has completado todos los ejercicios de repaso.</p>
+    <p style="margin-top:10px;font-weight:700;font-size:18px;color:var(--blue);">⭐ <span id="final-score">0</span> puntos conseguidos</p>
+    <p style="margin-top:8px;font-size:14px;">¡Estás muy preparado para el examen del 8 de mayo! 💪</p>
+  </div>
+
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="showSection('noticia',document.querySelectorAll('.tab-btn')[3])">← Noticia</button>
+    <button class="nav-btn primary" onclick="showCelebration()">🎉 Ver mi resultado</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+let score = 0;
+let done = 0;
+const TOTAL = 22;
+const answered = {};
+
+function addScore(id, pts) {
+  if (answered[id]) return false;
+  answered[id] = true;
+  score += pts;
+  done++;
+  document.getElementById('score-val').textContent = score;
+  let pct = Math.round((done / TOTAL) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = done + ' de ' + TOTAL + ' ejercicios completados';
+  return true;
+}
+
+function checkOpcion(btn, result, fbId, msg) {
+  let qId = fbId;
+  let siblings = btn.parentElement.querySelectorAll('.opcion-btn');
+  if (btn.disabled) return;
+  siblings.forEach(b => { b.disabled = true; });
+  if (result === 'correct') {
+    btn.classList.add('correct');
+    btn.querySelector('.opcion-ico').textContent = '✅';
+    addScore(qId, 1);
+  } else {
+    btn.classList.add('wrong');
+    btn.querySelector('.opcion-ico').textContent = '❌';
+  }
+  let fb = document.getElementById(fbId);
+  fb.innerHTML = (result === 'correct' ? '✅ ' : '💡 ') + msg;
+  fb.className = 'feedback show ' + (result === 'correct' ? 'ok' : 'mal');
+}
+
+function checkBlanks(ids, answers, fbId) {
+  if (answered[fbId]) return;
+  let allOk = true;
+  ids.forEach((id, i) => {
+    let el = document.getElementById(id);
+    let val = el.value.trim().toUpperCase();
+    if (val === answers[i].toUpperCase()) {
+      el.classList.add('filled-ok');
+    } else {
+      el.classList.add('filled-err');
+      allOk = false;
+    }
+    el.disabled = true;
+  });
+  let fb = document.getElementById(fbId);
+  if (allOk) {
+    fb.innerHTML = '✅ ¡Perfecto! Todas correctas.';
+    fb.className = 'feedback show ok';
+    addScore(fbId, 1);
+  } else {
+    fb.innerHTML = '💡 Hay algún error. Respuestas: ' + answers.join(' / ');
+    fb.className = 'feedback show mal';
+    answered[fbId] = true;
+  }
+}
+
+function checkBlanksText(ids, answers, fbId) {
+  if (answered[fbId]) return;
+  let allOk = true;
+  ids.forEach((id, i) => {
+    let el = document.getElementById(id);
+    let val = el.value.trim().toLowerCase();
+    if (val === answers[i].toLowerCase()) {
+      el.classList.add('filled-ok');
+    } else {
+      el.classList.add('filled-err');
+      allOk = false;
+    }
+    el.disabled = true;
+  });
+  let fb = document.getElementById(fbId);
+  if (allOk) {
+    fb.innerHTML = '✅ ¡Fantástico! Texto completado correctamente.';
+    fb.className = 'feedback show ok';
+    addScore(fbId, 1);
+  } else {
+    fb.innerHTML = '💡 Revisa las palabras. Eran: ' + answers.join(' / ');
+    fb.className = 'feedback show mal';
+    answered[fbId] = true;
+  }
+}
+
+function markWritten(btn, fbId) {
+  if (answered[fbId]) return;
+  btn.disabled = true;
+  btn.textContent = '✅ ¡Guardado!';
+  let fb = document.getElementById(fbId);
+  fb.innerHTML = '✅ ¡Muy bien! Has completado este ejercicio.';
+  fb.className = 'feedback show ok';
+  addScore(fbId, 1);
+}
+
+// CLASIFICAR chips
+let selectedChip = null;
+function selectChip(el) {
+  if (el.classList.contains('placed-correct') || el.classList.contains('placed-wrong')) return;
+  document.querySelectorAll('.chip-word').forEach(c => c.style.outline = '');
+  selectedChip = el;
+  el.style.outline = '3px solid var(--purple)';
+}
+
+function dropChip(zone, type) {
+  if (!selectedChip) return;
+  selectedChip.style.outline = '';
+  zone.appendChild(selectedChip);
+  selectedChip.classList.remove('placed-sust','placed-adj','placed-verb');
+  selectedChip.classList.add('placed-' + type);
+  selectedChip.setAttribute('data-placed', type);
+  selectedChip.onclick = function() { selectChip(this); };
+  selectedChip = null;
+}
+
+const correctClass = { gato:'sust', parque:'sust', libro:'sust', corre:'verb', vuela:'verb', salta:'verb', pequeño:'adj', bonito:'adj', grande:'adj' };
+
+function checkClasificar(fbId) {
+  if (answered[fbId]) return;
+  let chips = document.querySelectorAll('.chip-word');
+  let allOk = true;
+  chips.forEach(chip => {
+    let word = chip.dataset.word;
+    let placed = chip.getAttribute('data-placed');
+    if (placed && placed === correctClass[word]) {
+      chip.classList.add('placed-correct');
+    } else {
+      chip.classList.add('placed-wrong');
+      allOk = false;
+    }
+  });
+  let fb = document.getElementById(fbId);
+  if (allOk) {
+    fb.innerHTML = '✅ ¡Perfecto! Todas las palabras en su lugar correcto.';
+    fb.className = 'feedback show ok';
+    addScore(fbId, 1);
+  } else {
+    fb.innerHTML = '💡 Hay algún error. Sustantivos: gato, parque, libro · Adjetivos: pequeño, bonito, grande · Verbos: corre, vuela, salta';
+    fb.className = 'feedback show mal';
+    answered[fbId] = true;
+  }
+}
+
+// MATCHING sinónimos
+let leftSelected = null;
+const sinonimoPairs = { rápido:'veloz', glotón:'comilón', fantástico:'maravilloso', hablador:'parlanchín' };
+
+function selectLeft(el) {
+  if (el.classList.contains('matched-ok')) return;
+  document.querySelectorAll('#left-col .match-item').forEach(i => i.classList.remove('selected'));
+  leftSelected = el;
+  el.classList.add('selected');
+}
+
+function selectRight(el) {
+  if (!leftSelected || el.classList.contains('matched-ok')) return;
+  let leftWord = leftSelected.dataset.word;
+  let rightPair = el.dataset.pair;
+  if (leftWord === rightPair) {
+    leftSelected.classList.remove('selected');
+    leftSelected.classList.add('matched-ok');
+    el.classList.add('matched-ok');
+    leftSelected.onclick = null;
+    el.onclick = null;
+    addScore('match-' + leftWord, 0.25);
+    let allDone = document.querySelectorAll('#left-col .matched-ok').length === 4;
+    if (allDone) {
+      let fb = document.getElementById('fb-q11');
+      fb.innerHTML = '✅ ¡Todos los sinónimos correctos!';
+      fb.className = 'feedback show ok';
+    }
+  } else {
+    leftSelected.classList.remove('selected');
+    el.classList.add('matched-err');
+    setTimeout(() => el.classList.remove('matched-err'), 600);
+  }
+  leftSelected = null;
+}
+
+function checkTemporales() {
+  let m = document.getElementById('sel-m').value;
+  let t = document.getElementById('sel-t').value;
+  let n = document.getElementById('sel-n').value;
+  if (!m || !t || !n) return;
+  let fb = document.getElementById('fb-v4');
+  if (m === 'teatro' && t === 'cine' && n === 'fuegos') {
+    fb.innerHTML = '✅ ¡Correcto! Por la mañana el teatro, por la tarde el cine y por la noche los fuegos.';
+    fb.className = 'feedback show ok';
+    addScore('fb-v4', 1);
+    ['sel-m','sel-t','sel-n'].forEach(id => document.getElementById(id).disabled = true);
+  } else {
+    fb.innerHTML = '💡 No es correcto. Piensa: el teatro es a las 10:30 (mañana), el cine a las 17:00 (tarde), los fuegos a las 23:00 (noche).';
+    fb.className = 'feedback show mal';
+  }
+}
+
+function checkCartel(fbId) {
+  if (answered[fbId]) return;
+  let fields = document.querySelectorAll('.cartel-box input');
+  let filled = [...fields].every(f => f.value.trim().length > 2);
+  let fb = document.getElementById(fbId);
+  if (filled) {
+    fb.innerHTML = '✅ ¡Cartel completado! Recuerda: nombre en MAYÚSCULAS, cuándo, dónde y frase para animar.';
+    fb.className = 'feedback show ok';
+    addScore(fbId, 1);
+  } else {
+    fb.innerHTML = '💡 Rellena todos los campos del cartel antes de terminar.';
+    fb.className = 'feedback show mal';
+  }
+}
+
+function showSection(id, tabEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showCelebration() {
+  document.getElementById('celebrate').classList.add('show');
+  document.getElementById('final-score').textContent = score;
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
